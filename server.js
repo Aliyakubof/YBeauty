@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Render portni o'zi beradi
+const PORT = process.env.PORT || 3000;
 
 // MongoDB ulanish
 const MONGO_URI = "mongodb+srv://Muxammadali:aass2617@cluster0.pqow7zd.mongodb.net/sotuv?retryWrites=true&w=majority&appName=Cluster0";
@@ -31,7 +31,7 @@ const Order = mongoose.model("Order", orderSchema);
 app.use(cors());
 app.use(bodyParser.json());
 
-// Static fayllar joylashgan papka
+// Public papkani ochish
 app.use(express.static(path.join(__dirname, "public")));
 
 // Asosiy sahifa
