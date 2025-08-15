@@ -30,14 +30,7 @@ const Order = mongoose.model("Order", orderSchema);
 
 app.use(cors());
 app.use(bodyParser.json());
-
-// Public papkani ochish
 app.use(express.static(path.join(__dirname, "public")));
-
-// Asosiy sahifa
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "sotuv.html"));
-});
 
 // Buyurtma qabul qilish
 app.post("/api/orders", async (req, res) => {
@@ -68,6 +61,11 @@ app.get("/api/orders", async (req, res) => {
         console.error("❌ Buyurtmalarni olishda xato:", err);
         res.status(500).json({ success: false, message: "Server xatosi" });
     }
+});
+
+// Asosiy sahifa
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "sotuv.html"));
 });
 
 app.listen(PORT, () => {
