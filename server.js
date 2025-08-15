@@ -1,73 +1,39 @@
-// server.js
-const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// MongoDB ulanish
-const MONGO_URI = "mongodb+srv://Muxammadali:aass2617@cluster0.pqow7zd.mongodb.net/sotuv?retryWrites=true&w=majority&appName=Cluster0";
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("✅ MongoDB ulanish muvaffaqiyatli"))
-    .catch(err => console.error("❌ MongoDB ulanish xatosi:", err));
-
-// Admin kaliti
-const ADMIN_KEY = "12345";
-
-// Mongoose schema
-const orderSchema = new mongoose.Schema({
-    sana: String,
-    ism: String,
-    tel: String,
-    manzil: String,
-    mahsulot: String,
-    narx: Number
-});
-const Order = mongoose.model("Order", orderSchema);
-
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static('public'));
 
-// Buyurtma qabul qilish
-app.post("/api/orders", async (req, res) => {
-    const order = req.body;
-    if (!order.ism || !order.tel || !order.manzil || !order.mahsulot || !order.narx) {
-        return res.status(400).json({ success: false, message: "Barcha maydonlarni to‘ldiring" });
-    }
-    try {
-        await Order.create(order);
-        console.log("✅ Yangi buyurtma:", order);
-        res.json({ success: true });
-    } catch (err) {
-        console.error("❌ Buyurtma saqlashda xato:", err);
-        res.status(500).json({ success: false, message: "Server xatosi" });
-    }
+const ordersFile = path.join(__dirname, 'orders.json');
+
+function getOrders() {
+  if (!fs.existsSync(ordersFile)) return [];
+  return JSON.parse(fs.readFileSync(ordersFile, 'utf8'));
+}
+
+function saveOrders(orders) {
+  fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2));
+}
+
+app.post('/api/orders', (req, res) => {
+  const order = req.body;
+  const orders = getOrders();
+  orders.push(order);
+  saveOrders(orders);
+  res.json({ success: true });
 });
 
-// Admin buyurtmalarni ko‘rish
-app.get("/api/orders", async (req, res) => {
-    const key = req.query.key;
-    if (key !== ADMIN_KEY) {
-        return res.status(403).json({ success: false, message: "Ruxsat yo‘q" });
-    }
-    try {
-        const orders = await Order.find().sort({ _id: -1 });
-        res.json(orders);
-    } catch (err) {
-        console.error("❌ Buyurtmalarni olishda xato:", err);
-        res.status(500).json({ success: false, message: "Server xatosi" });
-    }
+app.get('/api/orders', (req, res) => {
+  const key = req.query.key;
+  if (key !== 'admin123') return res.status(403).json({ error: 'Siz admin emassiz!' });
+  res.json(getOrders());
 });
 
-// Asosiy sahifa
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "sotuv.html"));
-});
-
-app.listen(PORT, () => {
-    console.log(`✅ Server ${PORT}-portda ishlayapti`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
