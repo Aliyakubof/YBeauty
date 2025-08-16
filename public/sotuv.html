@@ -6,31 +6,34 @@
 <title>YBeauty</title>
 <style>
 body{margin:0;font-family:'Segoe UI',sans-serif;background:#fff;color:#333;}
-.header-top{background:#ff69b4;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;}
+.header-top{background:#ffb6c1;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-weight:bold;font-size:22px;color:white;}
 .search-box{background:white;border-radius:20px;display:flex;align-items:center;padding:3px 8px;}
-.search-box input{border:none;outline:none;padding:5px;border-radius:20px;}
+.search-box input{border:none;outline:none;padding:5px;}
 .search-box button{background:none;border:none;font-size:18px;cursor:pointer;color:#ff69b4;}
-.user-icon{font-size:22px;cursor:pointer;margin-left:10px;color:white;}
-nav{background:#ffe4e9;display:flex;justify-content:center;gap:15px;padding:10px 0;position:sticky;top:0;z-index:100;}
+.user-icon{margin-left:10px;font-size:20px;cursor:pointer;color:white;}
+nav{background:#ffe4e9;display:flex;justify-content:center;gap:15px;padding:10px 0;position:sticky;top:0;z-index:10;}
 nav a{text-decoration:none;color:#ff69b4;font-weight:500;cursor:pointer;}
 nav a:hover{text-decoration:underline;}
 .section{display:none;padding:20px;}
 .section.active{display:block;}
-.slider{position:relative;overflow:hidden;border-radius:10px;height:250px;margin-bottom:20px;}
+.slider{position:relative;overflow:hidden;border-radius:10px;height:250px;}
 .slides{display:flex;transition:transform 0.5s ease-in-out;}
 .slides img{width:100%;height:100%;object-fit:cover;flex-shrink:0;}
-.mini-cards{display:flex;overflow-x:auto;gap:10px;padding:10px 0;margin-bottom:20px;}
+.mini-cards{display:flex;overflow-x:auto;gap:10px;padding:10px 0;}
 .mini-cards::-webkit-scrollbar{display:none;}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;}
-.card{background:white;border-radius:10px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);text-align:center;cursor:pointer;}
+.card{background:white;border-radius:10px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);width:calc(50% - 10px);text-align:center;cursor:pointer;}
 .card img{width:100%;border-radius:8px;}
-.price{color:#ff69b4;font-weight:bold;margin-top:5px;}
+.price{color:#ff69b4;font-weight:bold;}
+.row{display:flex;flex-wrap:wrap;gap:10px;}
+table{border-collapse:collapse;width:100%;margin-top:20px;}
+th,td{border:1px solid #ddd;padding:8px;text-align:center;}
+th{background:#ffb6c1;color:white;}
+form input,form button{padding:8px;margin:5px 0;width:100%;max-width:300px;}
+form button{cursor:pointer;}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
 .modal-content{background:white;padding:20px;border-radius:10px;max-width:400px;width:90%;position:relative;}
 .close{position:absolute;top:10px;right:10px;font-size:18px;cursor:pointer;}
-form input,form button{padding:8px;margin:5px 0;width:100%;max-width:300px;}
-form button{cursor:pointer;background:#ff69b4;color:white;border:none;border-radius:5px;}
 </style>
 
 <!-- Firebase SDK -->
@@ -55,80 +58,79 @@ const db = getDatabase(app);
 <body>
 
 <div class="header-top">
-<div class="logo">YBeauty</div>
-<div style="display:flex;align-items:center;">
-<div class="search-box">
-<input type="text" placeholder="Qidirish...">
-<button>🔍</button>
-</div>
-<div class="user-icon" onclick="showSection('admin')">👤</div>
-</div>
+  <div class="logo">YBeauty</div>
+  <div style="display:flex;align-items:center;">
+    <div class="search-box">
+      <input type="text" placeholder="Qidirish...">
+      <button>🔍</button>
+    </div>
+    <div class="user-icon">👤</div>
+  </div>
 </div>
 
 <nav>
-<a onclick="scrollToSection('home')">Asosiy</a>
-<a onclick="scrollToSection('perfume')">Parfyumeriya</a>
-<a onclick="scrollToSection('cosmetics')">Kosmetika</a>
-<a onclick="scrollToSection('sale')">Aksiyalar</a>
+  <a onclick="showSection('home')">Asosiy</a>
+  <a onclick="showSection('perfume')">Parfyumeriya</a>
+  <a onclick="showSection('cosmetics')">Kosmetika</a>
+  <a onclick="showSection('sale')">Aksiyalar</a>
 </nav>
 
 <!-- HOME -->
 <div id="home" class="section active">
-<div class="slider">
-<div class="slides" id="slides">
-<img src="https://via.placeholder.com/600x250" alt="">
-<img src="https://via.placeholder.com/600x250/ffb6c1" alt="">
-<img src="https://via.placeholder.com/600x250/ffe4e9" alt="">
-</div>
-</div>
-
-<h3>🛍 Yangi kelganlar</h3>
-<div class="mini-cards" id="homeMiniCards">
-<div class="card" onclick="openModal('Perfume A','120000','https://via.placeholder.com/150')"><img src="https://via.placeholder.com/150"><h4>Perfume A</h4><p class="price">120 000 so‘m</p></div>
-<div class="card" onclick="openModal('Lipstick B','45000','https://via.placeholder.com/150')"><img src="https://via.placeholder.com/150"><h4>Lipstick B</h4><p class="price">45 000 so‘m</p></div>
-<div class="card" onclick="openModal('Foundation C','80000','https://via.placeholder.com/150')"><h4>Foundation C</h4><p class="price">80 000 so‘m</p></div>
-</div>
-
-<h3>Mahsulotlar</h3>
-<div class="card-grid" id="homeCards">
-<!-- JS orqali chiqaramiz -->
-</div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin" class="section">
-<h2>Admin Panel</h2>
-<label>Admin kalitni kiriting:</label>
-<input type="password" id="adminKey">
-<button onclick="loadOrders()">Kirish</button>
-<table id="ordersTable">
-<tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Manzil</th><th>Mahsulot</th><th>Narx</th></tr>
-</table>
+  <div class="slider">
+    <div class="slides" id="slides">
+      <img src="https://via.placeholder.com/600x250" alt="">
+      <img src="https://via.placeholder.com/600x250/ffb6c1" alt="">
+      <img src="https://via.placeholder.com/600x250/ffe4e9" alt="">
+    </div>
+  </div>
+  <h3>🛍 Yangi kelganlar</h3>
+  <div class="mini-cards row">
+    <div class="card" onclick="openModal('Perfume A', '120000', 'https://via.placeholder.com/300')">
+      <img src="https://via.placeholder.com/150" alt="">
+      <h4>Perfume A</h4>
+      <p class="price">120 000 so‘m</p>
+    </div>
+    <div class="card" onclick="openModal('Lipstick B', '45000', 'https://via.placeholder.com/300')">
+      <img src="https://via.placeholder.com/150" alt="">
+      <h4>Lipstick B</h4>
+      <p class="price">45 000 so‘m</p>
+    </div>
+    <div class="card" onclick="openModal('Foundation C', '80000', 'https://via.placeholder.com/300')">
+      <img src="https://via.placeholder.com/150" alt="">
+      <h4>Foundation C</h4>
+      <p class="price">80 000 so‘m</p>
+    </div>
+    <div class="card" onclick="openModal('Perfume D', '150000', 'https://via.placeholder.com/300')">
+      <img src="https://via.placeholder.com/150" alt="">
+      <h4>Perfume D</h4>
+      <p class="price">150 000 so‘m</p>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="orderModal">
-<div class="modal-content">
-<span class="close" onclick="closeModal()">✖</span>
-<img id="modalImage" src="" style="width:100%;border-radius:8px;">
-<h3 id="modalProduct"></h3>
-<p id="modalPrice" class="price"></p>
-<p id="modalDesc">Mahsulot tavsifi...</p>
-<form id="orderForm">
-<input type="text" id="name" placeholder="Ism" required>
-<input type="tel" id="phone" placeholder="Telefon" required>
-<input type="text" id="address" placeholder="Manzil" required>
-<button type="submit">Buyurtma berish</button>
-</form>
-</div>
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">✖</span>
+    <img id="modalImage" src="" style="width:100%;border-radius:8px;">
+    <h3 id="modalProduct"></h3>
+    <p id="modalPrice" class="price"></p>
+    <form id="orderForm">
+      <input type="text" id="name" placeholder="Ism" required>
+      <input type="tel" id="phone" placeholder="Telefon" required>
+      <input type="text" id="address" placeholder="Manzil" required>
+      <button type="submit">Buyurtma berish</button>
+    </form>
+  </div>
 </div>
 
 <script type="module">
-let selectedProduct = {name:'', price:'', image:'', desc:''};
+let selectedProduct = { name: "", price: "", image: "" };
 
-// Navbar scroll
-function scrollToSection(id){
-  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+function showSection(sectionId){
+  document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
 }
 
 // Slider
@@ -137,59 +139,32 @@ const slides=document.getElementById("slides");
 const totalSlides=slides.children.length;
 setInterval(()=>{index=(index+1)%totalSlides;slides.style.transform=`translateX(-${index*100}%)`;},3000);
 
-// Modal
-function openModal(name,price,image){
-  selectedProduct={name,price,image};
-  document.getElementById("modalProduct").innerText=name;
-  document.getElementById("modalPrice").innerText=price+' so‘m';
-  document.getElementById("modalImage").src=image;
-  document.getElementById("orderModal").style.display='flex';
+function openModal(name, price, image){
+  selectedProduct = { name, price, image };
+  document.getElementById("modalProduct").innerText = name;
+  document.getElementById("modalPrice").innerText = price + " so‘m";
+  document.getElementById("modalImage").src = image;
+  document.getElementById("orderModal").style.display = "flex";
 }
-function closeModal(){document.getElementById("orderModal").style.display='none';}
 
-// Buyurtma
-document.getElementById("orderForm").addEventListener("submit",async function(e){
-e.preventDefault();
-const data={
-  sana:new Date().toLocaleString(),
-  ism:document.getElementById("name").value,
-  tel:document.getElementById("phone").value,
-  manzil:document.getElementById("address").value,
-  mahsulot:selectedProduct.name,
-  narx:selectedProduct.price
-};
-await push(ref(db,'orders'),data);
-alert('✅ Buyurtma yuborildi!');
-document.getElementById("orderForm").reset();
-closeModal();
+function closeModal(){document.getElementById("orderModal").style.display = "none";}
+
+// Firebase buyurtma
+document.getElementById("orderForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const data = {
+    sana: new Date().toLocaleString(),
+    ism: document.getElementById("name").value,
+    tel: document.getElementById("phone").value,
+    manzil: document.getElementById("address").value,
+    mahsulot: selectedProduct.name,
+    narx: selectedProduct.price
+  };
+  await push(ref(db, 'orders'), data);
+  alert("✅ Buyurtma yuborildi!");
+  document.getElementById("orderForm").reset();
+  closeModal();
 });
-
-// Admin panel
-async function loadOrders(){
-const key=document.getElementById("adminKey").value;
-if(key!=='admin123'){alert('Siz admin emassiz!'); return;}
-const snapshot=await get(ref(db,'orders'));
-const orders=snapshot.val();
-const table=document.getElementById("ordersTable");
-table.querySelectorAll("tr:not(:first-child)").forEach(tr=>tr.remove());
-if(orders){
-  Object.values(orders).forEach(o=>{
-    const row=table.insertRow();
-    row.insertCell(0).innerText=o.sana;
-    row.insertCell(1).innerText=o.ism;
-    row.insertCell(2).innerText=o.tel;
-    row.insertCell(3).innerText=o.manzil;
-    row.insertCell(4).innerText=o.mahsulot;
-    row.insertCell(5).innerText=o.narx;
-  });
-}
-showSection('admin');
-}
-
-function showSection(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
 </script>
 
 </body>
