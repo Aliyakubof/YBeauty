@@ -24,138 +24,172 @@ nav a:hover{text-decoration:underline;}
 .card{background:white;border-radius:10px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);min-width:140px;text-align:center;flex-shrink:0;cursor:pointer;}
 .card img{width:100%;border-radius:8px;}
 .price{color:#ff69b4;font-weight:bold;}
+table{border-collapse:collapse;width:100%;margin-top:20px;}
+th,td{border:1px solid #ddd;padding:8px;text-align:center;}
+th{background:#ffb6c1;color:white;}
+form input,form button{padding:8px;margin:5px 0;width:100%;max-width:300px;}
+form button{cursor:pointer;}
 /* Modal */
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
 .modal-content{background:white;padding:20px;border-radius:10px;max-width:400px;width:90%;position:relative;}
 .close{position:absolute;top:10px;right:10px;font-size:18px;cursor:pointer;}
 </style>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBW6PoZ2TMbkHqetNiLt0rUivdgbsM6ivs",
+    authDomain: "ybeauty-f45b6.firebaseapp.com",
+    projectId: "ybeauty-f45b6",
+    storageBucket: "ybeauty-f45b6.firebasestorage.app",
+    messagingSenderId: "854762032933",
+    appId: "1:854762032933:web:8c0004ca975950761294cc",
+    measurementId: "G-N5FZ8YB698"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  window.firebaseDB = database; // global qilib oldik
+</script>
+
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header-top">
-  <div class="logo">YBeauty</div>
-  <div class="search-box">
-    <input type="text" placeholder="Qidirish...">
-    <button>🔍</button>
-  </div>
+<div class="logo">YBeauty</div>
+<div class="search-box">
+<input type="text" placeholder="Qidirish...">
+<button>🔍</button>
+</div>
 </div>
 
+<!-- NAV -->
 <nav>
-  <a href="#" onclick="showSection('home')">Asosiy</a>
-  <a href="#" onclick="showSection('perfume')">Parfyumeriya</a>
-  <a href="#" onclick="showSection('cosmetics')">Kosmetika</a>
-  <a href="#" onclick="showSection('sale')">Aksiyalar</a>
-  <a href="#" onclick="showSection('admin')">👤</a>
+<a href="#" onclick="showSection('home')">Asosiy</a>
+<a href="#" onclick="showSection('perfume')">Parfyumeriya</a>
+<a href="#" onclick="showSection('cosmetics')">Kosmetika</a>
+<a href="#" onclick="showSection('sale')">Aksiyalar</a>
+<a href="#" onclick="showSection('admin')">👤 Admin</a>
 </nav>
 
+<!-- HOME SECTION -->
 <div id="home" class="section active">
-  <h3>🛍 Yangi kelganlar</h3>
-  <div class="mini-cards">
-    <div class="card" onclick="openModal('Perfume A', '120000', 'https://via.placeholder.com/150')">
-      <img src="https://via.placeholder.com/150" alt="">
-      <h4>Perfume A</h4>
-      <p class="price">120 000 so‘m</p>
-    </div>
-    <div class="card" onclick="openModal('Lipstick B', '45000', 'https://via.placeholder.com/150')">
-      <img src="https://via.placeholder.com/150" alt="">
-      <h4>Lipstick B</h4>
-      <p class="price">45 000 so‘m</p>
-    </div>
-    <div class="card" onclick="openModal('Foundation C', '80000', 'https://via.placeholder.com/150')">
-      <img src="https://via.placeholder.com/150" alt="">
-      <h4>Foundation C</h4>
-      <p class="price">80 000 so‘m</p>
-    </div>
-  </div>
+<div class="slider">
+<div class="slides" id="slides">
+<img src="https://via.placeholder.com/600x250" alt="">
+<img src="https://via.placeholder.com/600x250/ffb6c1" alt="">
+<img src="https://via.placeholder.com/600x250/ffe4e9" alt="">
+</div>
 </div>
 
+<h3>🛍 Yangi kelganlar</h3>
+<div class="mini-cards">
+<div class="card" onclick="openModal('Perfume A', '120000', 'https://via.placeholder.com/150')"><img src="https://via.placeholder.com/150" alt=""><h4>Perfume A</h4><p class="price">120 000 so‘m</p></div>
+<div class="card" onclick="openModal('Lipstick B', '45000', 'https://via.placeholder.com/150')"><img src="https://via.placeholder.com/150" alt=""><h4>Lipstick B</h4><p class="price">45 000 so‘m</p></div>
+<div class="card" onclick="openModal('Foundation C', '80000', 'https://via.placeholder.com/150')"><img src="https://via.placeholder.com/150" alt=""><h4>Foundation C</h4><p class="price">80 000 so‘m</p></div>
+</div>
+</div>
+
+<!-- ADMIN PANEL -->
 <div id="admin" class="section">
-  <h2>Admin Panel</h2>
-  <label>Admin kalitni kiriting:</label>
-  <input type="password" id="adminKey">
-  <button onclick="loadOrders()">Kirish</button>
-  <table id="ordersTable">
-    <tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Manzil</th><th>Mahsulot</th><th>Narx</th></tr>
-  </table>
+<h2>Admin Panel</h2>
+<table id="ordersTable">
+<tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Manzil</th><th>Mahsulot</th><th>Narx</th></tr>
+</table>
 </div>
 
+<!-- MODAL -->
 <div class="modal" id="orderModal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">✖</span>
-    <img id="modalImage" src="" style="width:100%;border-radius:8px;">
-    <h3 id="modalProduct"></h3>
-    <p id="modalPrice" class="price"></p>
-    <form id="orderForm">
-      <input type="text" id="name" placeholder="Ism" required>
-      <input type="tel" id="phone" placeholder="Telefon" required>
-      <input type="text" id="address" placeholder="Manzil" required>
-      <button type="submit">Buyurtma berish</button>
-    </form>
-  </div>
+<div class="modal-content">
+<span class="close" onclick="closeModal()">✖</span>
+<img id="modalImage" src="" style="width:100%;border-radius:8px;">
+<h3 id="modalProduct"></h3>
+<p id="modalPrice" class="price"></p>
+<form id="orderForm">
+<input type="text" id="name" placeholder="Ism" required>
+<input type="tel" id="phone" placeholder="Telefon" required>
+<input type="text" id="address" placeholder="Manzil" required>
+<button type="submit">Buyurtma berish</button>
+</form>
+</div>
 </div>
 
 <script>
-function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+// SECTION SWITCH
+function showSection(sectionId){
+  document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
 }
 
-let selectedProduct = { name:"", price:"", image:"" };
+// SLIDER
+let index=0;
+const slides=document.getElementById("slides");
+const totalSlides=slides.children.length;
+setInterval(()=>{index=(index+1)%totalSlides;slides.style.transform=`translateX(-${index*100}%)`;},3000);
+
+let selectedProduct = { name: "", price: "", image: "" };
 
 function openModal(name, price, image){
   selectedProduct = { name, price, image };
-  document.getElementById("modalProduct").innerText=name;
-  document.getElementById("modalPrice").innerText=price+" so‘m";
-  document.getElementById("modalImage").src=image;
-  document.getElementById("orderModal").style.display="flex";
+  document.getElementById("modalProduct").innerText = name;
+  document.getElementById("modalPrice").innerText = price + " so‘m";
+  document.getElementById("modalImage").src = image;
+  document.getElementById("orderModal").style.display = "flex";
 }
 
-function closeModal(){ document.getElementById("orderModal").style.display="none"; }
+function closeModal(){
+  document.getElementById("orderModal").style.display = "none";
+}
 
-document.getElementById("orderForm").addEventListener("submit", async function(e){
+// BUYURTMA YUBORISH
+document.getElementById("orderForm").addEventListener("submit", function(e){
   e.preventDefault();
-  let data={
-    sana:new Date().toLocaleString(),
-    ism:document.getElementById("name").value,
-    tel:document.getElementById("phone").value,
-    manzil:document.getElementById("address").value,
-    mahsulot:selectedProduct.name,
-    narx:selectedProduct.price
+  const db = window.firebaseDB;
+  const { name, phone, address } = document.getElementById.bind(document);
+  const data = {
+    sana: new Date().toLocaleString(),
+    ism: name.value,
+    tel: phone.value,
+    manzil: address.value,
+    mahsulot: selectedProduct.name,
+    narx: selectedProduct.price
   };
-  try{
-    let res=await fetch("/api/orders",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(data)
-    });
-    let result=await res.json();
-    if(result.success){
-      alert("✅ Buyurtma yuborildi!");
-      document.getElementById("orderForm").reset();
-      closeModal();
-    } else { alert("❌ Xatolik"); }
-  }catch(err){ alert("❌ Server bilan aloqa xatosi"); }
+  push(ref(db, 'orders'), data)
+    .then(()=>{ alert("✅ Buyurtma yuborildi!"); document.getElementById("orderForm").reset(); closeModal(); })
+    .catch(err=>alert("❌ Xatolik: " + err));
 });
 
-async function loadOrders(){
-  const key=document.getElementById("adminKey").value;
-  if(!key){ alert("Kalit kiriting!"); return; }
-  let res=await fetch(`/api/orders?key=${key}`);
-  if(res.status===403){ alert("Siz admin emassiz!"); return; }
-  let orders=await res.json();
-  let table=document.getElementById("ordersTable");
-  table.querySelectorAll("tr:not(:first-child)").forEach(tr=>tr.remove());
-  orders.forEach(o=>{
-    let row=table.insertRow();
-    row.insertCell(0).innerText=o.sana;
-    row.insertCell(1).innerText=o.ism;
-    row.insertCell(2).innerText=o.tel;
-    row.insertCell(3).innerText=o.manzil;
-    row.insertCell(4).innerText=o.mahsulot;
-    row.insertCell(5).innerText=o.narx;
+// LOAD ORDERS FOR ADMIN
+function loadOrders(){
+  const db = window.firebaseDB;
+  const ordersRef = ref(db, 'orders');
+  const table = document.getElementById("ordersTable");
+  table.querySelectorAll("tr:not(:first-child)").forEach(tr => tr.remove());
+
+  onValue(ordersRef, snapshot=>{
+    table.querySelectorAll("tr:not(:first-child)").forEach(tr=>tr.remove());
+    snapshot.forEach(childSnapshot=>{
+      const o = childSnapshot.val();
+      const row = table.insertRow();
+      row.insertCell(0).innerText = o.sana;
+      row.insertCell(1).innerText = o.ism;
+      row.insertCell(2).innerText = o.tel;
+      row.insertCell(3).innerText = o.manzil;
+      row.insertCell(4).innerText = o.mahsulot;
+      row.insertCell(5).innerText = o.narx;
+    });
   });
   showSection("admin");
 }
+
+// Admin panelni avtomatik yuklash
+document.addEventListener("DOMContentLoaded", loadOrders);
 </script>
+
 </body>
 </html>
