@@ -4,15 +4,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Statik fayllar papkasi
-app.use(express.static('public'));
+app.use(express.static('public'));  // public papkada fayllar bor
 
-// Bosh sahifa uchun route
+// Bosh sahifa
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sotuv.html'));
 });
 
-// 404 uchun
+// 404
 app.use((req, res) => {
   res.status(404).send('404 - Page Not Found');
 });
