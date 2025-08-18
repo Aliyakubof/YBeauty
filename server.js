@@ -1,25 +1,28 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json"); // Firebase service key
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const admin = require('firebase-admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Firebase admin init
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://ybeauty-f45b6-default-rtdb.firebaseio.com"
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+  }),
+  databaseURL: process.env.DATABASE_URL
 });
 
 const db = admin.database();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static("public")); // public papka ichidagi HTML, CSS, JS fayllar uchun
+app.use(express.static("public"));
 
-// GET: barcha buyurtmalar (admin panel)
+// API: barcha buyurtmalar
 app.get("/api/orders", async (req, res) => {
   try {
     const snapshot = await db.ref("orders").once("value");
@@ -29,7 +32,7 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
-// POST: buyurtmani yangilash (sotildi status)
+// API: buyurtmani yangilash
 app.post("/api/orders/:id", async (req, res) => {
   const id = req.params.id;
   const { sotildi } = req.body;
@@ -45,7 +48,7 @@ app.post("/api/orders/:id", async (req, res) => {
   }
 });
 
-// DELETE: buyurtmani o‘chirish
+// API: buyurtmani o‘chirish
 app.delete("/api/orders/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -56,7 +59,6 @@ app.delete("/api/orders/:id", async (req, res) => {
   }
 });
 
-// Serverni ishga tushurish
 app.listen(PORT, () => {
   console.log(`Server ishlayapti: http://localhost:${PORT}`);
 });
