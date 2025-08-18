@@ -1,72 +1,62 @@
-const express = require('express');
-const path = require('path');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.static('public'));  // public papkada fayllar bor
-
-// Bosh sahifa
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'sotuv.html'));
-});
-
-// 404
-app.use((req, res) => {
-  res.status(404).send('404 - Page Not Found');
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
 const express = require("express");
-const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const admin = require("firebase-admin");
+const serviceAccount = require("./serviceAccountKey.json"); // Firebase service key
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// JSON body o‘qish
-app.use(bodyParser.json());
-app.use(express.static("public"));
-
-// Firebase ulash
-const serviceAccount = require("./serviceAccountKey.json"); // Firebase’dan olgan kalit
+// Firebase admin init
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com"
+  databaseURL: "https://ybeauty-f45b6-default-rtdb.firebaseio.com"
 });
+
 const db = admin.database();
 
-// Bosh sahifa
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "sotuv.html"));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static("public")); // public papka ichidagi HTML, CSS, JS fayllar uchun
+
+// GET: barcha buyurtmalar (admin panel)
+app.get("/api/orders", async (req, res) => {
+  try {
+    const snapshot = await db.ref("orders").once("value");
+    res.json(snapshot.val() || {});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Buyurtma qabul qilish
-app.post("/buyurtma", (req, res) => {
-  const buyurtma = req.body;
-
-  const ref = db.ref("buyurtmalar");
-  const yangiBuyurtma = ref.push();
-
-  yangiBuyurtma.set(buyurtma, (err) => {
-    if (err) {
-      console.error("Xatolik:", err);
-      res.status(500).send("Xatolik yuz berdi");
-    } else {
-      res.send("Buyurtma qabul qilindi!");
-    }
-  });
+// POST: buyurtmani yangilash (sotildi status)
+app.post("/api/orders/:id", async (req, res) => {
+  const id = req.params.id;
+  const { sotildi } = req.body;
+  try {
+    const orderRef = db.ref(`orders/${id}`);
+    const snap = await orderRef.once("value");
+    const data = snap.val();
+    if (!data) return res.status(404).json({ error: "Buyurtma topilmadi" });
+    await orderRef.update({ ...data, sotildi });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// 404
-app.use((req, res) => {
-  res.status(404).send("404 - Page Not Found");
+// DELETE: buyurtmani o‘chirish
+app.delete("/api/orders/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await db.ref(`orders/${id}`).remove();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
+// Serverni ishga tushurish
 app.listen(PORT, () => {
-  console.log(`Server ${PORT}-portda ishlayapti`);
+  console.log(`Server ishlayapti: http://localhost:${PORT}`);
 });
