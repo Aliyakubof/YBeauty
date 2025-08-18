@@ -16,28 +16,93 @@
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:ui-sans-serif,system-ui,"Segoe UI",Arial; color:var(--ink);background:#fff}
+  
   /* Header */
-  .header{background:var(--pink-300);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20}
+  .header{
+    background:var(--pink-300);
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
   .logo{color:#fff;font-weight:700;font-size:22px;letter-spacing:.3px}
-  .searchbar{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:6px 10px;min-width:240px;box-shadow:var(--card-shadow)}
-  .searchbar input{border:none;outline:none;font-size:14px;flex:1}
-  .icon-btn{border:none;background:transparent;cursor:pointer;font-size:20px;line-height:1;color:#fff;display:inline-flex;align-items:center;justify-content:center;transition:.15s transform}
+  .header-left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1;
+  }
+  .searchbar{
+    display:flex;align-items:center;gap:8px;
+    background:#fff;border-radius:999px;
+    padding:6px 10px;
+    min-width:0;
+    flex:1;
+    box-shadow:var(--card-shadow);
+  }
+  .searchbar input{border:none;outline:none;font-size:14px;flex:1;background:transparent}
+  .icon-btn{
+    border:none;
+    background:var(--pink);
+    cursor:pointer;
+    font-size:20px;
+    line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:.15s transform, .15s background, .15s color;
+    border-radius:8px;
+    padding:6px 10px;
+    color:#fff;
+  }
+  .icon-btn:hover{background:#ff85c1}
   .icon-btn:active{transform:scale(.95)}
+
   /* Navbar */
-  .navbar{background:var(--pink-200);display:flex;gap:18px;justify-content:center;align-items:center;padding:10px 8px;flex-wrap:wrap;position:sticky;top:56px;z-index:19}
-  .nav-link{border:none;background:transparent;color:var(--pink);font-weight:600;cursor:pointer;padding:6px 10px;border-radius:8px;transition:.15s background}
+  .navbar{
+    background:var(--pink-200);
+    display:flex;
+    gap:18px;
+    justify-content:center;
+    align-items:center;
+    padding:10px 8px;
+    flex-wrap:wrap;
+    position:sticky;
+    top:56px;
+    z-index:19;
+  }
+  .nav-link{
+    border:none;
+    background:transparent;
+    color:var(--pink);
+    font-weight:600;
+    cursor:pointer;
+    padding:6px 12px;
+    border-radius:8px;
+    transition:.15s background;
+    min-width:100px;
+    text-align:center;
+  }
   .nav-link.active,.nav-link:hover{background:#fff}
+
   /* Sections */
   .section{display:none;padding:18px;max-width:1100px;margin:0 auto}
   .section.active{display:block}
+
   /* Slider */
   .slider{position:relative;border-radius:14px;overflow:hidden;height:240px;margin-bottom:18px;box-shadow:var(--card-shadow)}
   .slides{display:flex;width:100%;height:100%;transition:transform .6s ease}
   .slides img{width:100%;height:100%;object-fit:cover;flex:1 0 100%}
+
   /* Mini-cards scroller */
   .mini{display:flex;gap:12px;overflow:auto;padding:6px 2px 10px}
   .mini::-webkit-scrollbar{display:none}
   .mini .card{min-width:150px}
+
   /* Grid cards */
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   @media(min-width:720px){ .grid{grid-template-columns:repeat(4,minmax(0,1fr));} }
@@ -48,6 +113,7 @@
   .title{font-size:14px;font-weight:600;margin:0 0 6px}
   .price{color:var(--pink);font-weight:700}
   h3.section-title{margin:8px 0 10px}
+
   /* Modal (product) */
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:40}
   .modal.open{display:flex}
@@ -56,12 +122,16 @@
   .modal-body{padding:16px}
   .muted{color:#666;font-size:14px}
   .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+  /* Buttons */
   .btn{border:none;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:700}
   .btn-primary{background:var(--pink);color:#fff}
   .btn-outline{background:#fff;border:2px solid var(--pink);color:var(--pink)}
+
   /* Order form inside modal */
   .form{display:grid;gap:10px;margin-top:12px}
-  .input{width:100%;padding:10px 12px;border:1px solid #e7e7e7;border-radius:10px;font-size:14px}
+  .input{width:100%;padding:10px 12px;border:1px solid #e7e7e7;border-radius:8px;font-size:14px}
+
   /* Admin */
   .admin-wrap{display:grid;gap:10px}
   table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:var(--card-shadow)}
@@ -69,12 +139,28 @@
   th{background:var(--pink-300);color:#fff}
   tr:last-child td{border-bottom:none}
   .pill{display:inline-block;background:#fff;color:#b30059;border:1px solid #ff99cc;padding:2px 8px;border-radius:999px;font-size:12px}
+
+  /* Stats */
+  .stats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+  .stat{flex:1;min-width:140px;background:var(--pink-200);padding:10px;border-radius:12px;text-align:center;box-shadow:var(--card-shadow)}
+  .stat h4{margin:0;font-size:14px;color:#444}
+  .stat p{margin:6px 0 0;font-weight:700;color:var(--pink)}
+
+  /* Back button */
+  .back-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--pink);
+    margin-bottom:12px;
+  }
 </style>
 
-<!-- ====== Firebase SDK (ES modules) ====== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js";
-  import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
+  import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBW6PoZ2TMbkHqetNiLt0rUivdgbsM6ivs",
@@ -92,21 +178,9 @@
   const $$ = s => document.querySelectorAll(s);
 
   // ====== DATA: Products ======
-  const perfume = Array.from({length:10},(_,i)=>({
-    id:`p${i+1}`, name:`Parfyum ${i+1}`, price: 90000 + i*5000,
-    img:`https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=800&auto=format&fit=crop`,
-    desc:"Nozik gul notalari, kundalik va kechki chiqishlar uchun mos."
-  }));
-  const cosmetics = Array.from({length:10},(_,i)=>({
-    id:`c${i+1}`, name:`Kosmetika ${i+1}`, price: 45000 + i*4000,
-    img:`https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=800&auto=format&fit=crop`,
-    desc:"Yuz terisini asraydigan, allergiyasiz, kundalik foydalanishga mos."
-  }));
-  const sales = Array.from({length:10},(_,i)=>({
-    id:`s${i+1}`, name:`Chegirma ${i+1}`, price: 30000 + i*3000,
-    img:`https://images.unsplash.com/photo-1585386959984-a41552231658?q=80&w=800&auto=format&fit=crop`,
-    desc:"Cheklangan aksiya! Sifatli mahsulotga yoqimli narx."
-  }));
+  const perfume = Array.from({length:8},(_,i)=>({id:`p${i+1}`, name:`Parfyum ${i+1}`, price: 90000 + i*5000, img:`https://picsum.photos/seed/perf${i}/400/300`, desc:"Nozik gul notalari, kundalik va kechki chiqishlar uchun mos."}));
+  const cosmetics = Array.from({length:8},(_,i)=>({id:`c${i+1}`, name:`Kosmetika ${i+1}`, price: 45000 + i*4000, img:`https://picsum.photos/seed/cos${i}/400/300`, desc:"Yuz terisini asraydigan, allergiyasiz, kundalik foydalanishga mos."}));
+  const sales = Array.from({length:8},(_,i)=>({id:`s${i+1}`, name:`Chegirma ${i+1}`, price: 30000 + i*3000, img:`https://picsum.photos/seed/sal${i}/400/300`, desc:"Cheklangan aksiya! Sifatli mahsulotga yoqimli narx."}));
 
   function money(n){ return n.toLocaleString('uz-UZ')+" so‘m"; }
 
@@ -140,6 +214,7 @@
   renderCards('perfume-grid', perfume);
   renderCards('cosmetics-grid', cosmetics);
   renderCards('sales-grid', sales);
+  renderCards('home-grid', [...perfume.slice(0,4),...cosmetics.slice(0,4)]);
 
   const sections = ["home","perfume","cosmetics","sale","admin"];
   function showSection(id){
@@ -160,6 +235,7 @@
 
   $("#adminBtn").addEventListener('click', ()=>showSection('admin'));
 
+  // Slider
   const slider = $("#slides");
   let idx = 0;
   const total = slider.children.length;
@@ -168,6 +244,7 @@
     slider.style.transform = `translateX(-${idx*100}%)`;
   }, 3000);
 
+  // Modal
   const modal = $("#productModal");
   const modalImg = $("#mImg");
   const modalName = $("#mName");
@@ -199,6 +276,7 @@
   $("#closeModal").addEventListener('click', closeProduct);
   modal.addEventListener('click', e=>{ if(e.target===modal) closeProduct(); });
 
+  // BUYURTMA Yozish
   $("#orderForm").addEventListener('submit', async (e)=>{
     e.preventDefault();
     if(!selectedProduct){ return; }
@@ -208,7 +286,8 @@
       tel: $("#fPhone").value.trim(),
       manzil: $("#fAddr").value.trim(),
       mahsulot: selectedProduct.name,
-      narx: selectedProduct.price
+      narx: selectedProduct.price,
+      sotildi:false
     };
     if(!data.ism || !data.tel || !data.manzil){
       alert("Iltimos, barcha maydonlarni to‘ldiring.");
@@ -220,16 +299,36 @@
     closeProduct();
   });
 
-  // ====== ADMIN: orders load ======
-  $("#loadBtn").addEventListener('click', async ()=>{
+  // ===== ADMIN PANEL =====
+  const adminSearch = $("#adminSearch");
+  let allOrders = {};
+
+  $("#loadBtn").addEventListener('click', ()=>{
     const key = $("#adminKey").value.trim();
     if(key !== 'aass2617'){ alert("Siz admin emassiz!"); return; }
 
-    const snap = await get(ref(db,'orders'));
-    const orders = snap.val() || {};
+    const ordersRef = ref(db,'orders');
+
+    onValue(ordersRef, (snap)=>{
+      allOrders = snap.val() || {};
+      renderAdminOrders();
+    });
+  });
+
+  function renderAdminOrders(query=''){
     const tbody = $("#ordersBody");
     tbody.innerHTML = '';
-    Object.values(orders).reverse().forEach(o=>{
+
+    let totalOrders=0, totalSum=0, soldCount=0, unsoldCount=0;
+
+    Object.entries(allOrders).reverse().forEach(([id,o])=>{
+      const searchable = (o.mahsulot||'').toLowerCase() + ' ' + (o.ism||'').toLowerCase();
+      if(!searchable.includes(query.toLowerCase())) return;
+
+      totalOrders++;
+      totalSum += Number(o.narx||0);
+      if(o.sotildi){ soldCount++; } else { unsoldCount++; }
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${o.sana||''}</td>
@@ -238,9 +337,44 @@
         <td>${o.manzil||''}</td>
         <td>${o.mahsulot||''}</td>
         <td>${o.narx?money(Number(o.narx)):'-'}</td>
+        <td>
+          <input type="checkbox" ${o.sotildi?"checked":""} data-id="${id}" class="soldChk"/>
+          <button class="delBtn" data-id="${id}" style="margin-left:6px;background:#ff4d6d;color:#fff;padding:2px 6px;border:none;border-radius:6px;cursor:pointer">O‘chirish</button>
+        </td>
       `;
       tbody.appendChild(tr);
     });
+
+    $("#totalOrders").textContent = totalOrders;
+    $("#totalSum").textContent = money(totalSum);
+    $("#soldCount").textContent = soldCount;
+    $("#unsoldCount").textContent = unsoldCount;
+
+    $$(".soldChk").forEach(chk=>{
+      chk.addEventListener('change', async ()=>{
+        const id = chk.dataset.id;
+        const isSold = chk.checked;
+        await set(ref(db,'orders/'+id), { ...allOrders[id], sotildi:isSold });
+      });
+    });
+
+    $$(".delBtn").forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const id = btn.dataset.id;
+        if(confirm("Siz rostdan ham ushbu buyurtmani o‘chirmoqchimisiz?")){
+          await set(ref(db,'orders/'+id), null);
+        }
+      });
+    });
+  }
+
+  adminSearch?.addEventListener('input', ()=>{
+    renderAdminOrders(adminSearch.value.trim());
+  });
+
+  // Back button
+  $$(".back-btn").forEach(btn=>{
+    btn.addEventListener('click', ()=>showSection('home'));
   });
 </script>
 </head>
@@ -248,16 +382,16 @@
 <body>
 
 <header class="header">
-  <div class="logo">YBeauty</div>
-  <div class="searchbar" style="flex:1;max-width:520px">
-    <span>🔍</span>
-    <input type="text" placeholder="Mahsulot qidirish..." />
+  <div class="header-left">
+    <div class="logo">YBeauty</div>
+    <div class="searchbar">
+      <input type="text" placeholder="Mahsulot qidirish..." />
+    </div>
   </div>
   <button id="adminBtn" class="icon-btn" title="Admin">👤</button>
 </header>
 
 <nav class="navbar">
-  <button class="nav-link active" data-target="home">Asosiy</button>
   <button class="nav-link" data-target="perfume">Parfyumeriya</button>
   <button class="nav-link" data-target="cosmetics">Kosmetika</button>
   <button class="nav-link" data-target="sale">Aksiyalar</button>
@@ -266,13 +400,17 @@
 <section id="home" class="section active">
   <div class="slider">
     <div id="slides" class="slides">
-      <img src="https://images.unsplash.com/photo-1556228453-efd1e3f0b8f3?q=80&w=1600&auto=format&fit=crop" alt="">
-      <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=1600&auto=format&fit=crop" alt="">
-      <img src="https://images.unsplash.com/photo-1556228578-0d85b1f9df71?q=80&w=1600&auto=format&fit=crop" alt="">
+      <img src="https://picsum.photos/id/1011/1600/400" alt="">
+      <img src="https://picsum.photos/id/1012/1600/400" alt="">
+      <img src="https://picsum.photos/id/1013/1600/400" alt="">
     </div>
   </div>
-  <h3 class="section-title">🛍 Yangi kelganlar</h3>
+
+  <h3 class="section-title">Yangi kelganlar</h3>
   <div id="mini-new" class="mini"></div>
+
+  <h3 class="section-title">Parfyumeriya</h3>
+  <div id="home-grid" class="grid"></div>
 </section>
 
 <section id="perfume" class="section">
@@ -291,44 +429,46 @@
 </section>
 
 <section id="admin" class="section">
-  <h3 class="section-title">Admin Panel</h3>
-  <div class="admin-wrap" style="max-width:860px;margin-inline:auto">
-    <div class="row" style="gap:8px">
-      <input id="adminKey" class="input" placeholder="Admin kalit..." type="password" style="max-width:260px">
-      <button id="loadBtn" class="btn btn-outline">Kirish</button>
-    </div>
-    <div style="overflow:auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Sana</th><th>Ism</th><th>Telefon</th><th>Manzil</th><th>Mahsulot</th><th>Narx</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody"></tbody>
-      </table>
-    </div>
+  <h3 class="section-title">Admin panel</h3>
+  <input id="adminKey" class="input" type="password" placeholder="Admin parol"/>
+  <button id="loadBtn" class="btn btn-primary">Yuklash</button>
+
+  <input id="adminSearch" class="input" type="text" placeholder="Mahsulot yoki mijoz ismi bo‘yicha qidirish..." style="margin:10px 0"/>
+
+  <div class="stats">
+    <div class="stat"><h4>Umumiy buyurtma</h4><p id="totalOrders">0</p></div>
+    <div class="stat"><h4>Jami summa</h4><p id="totalSum">0</p></div>
+    <div class="stat"><h4>Sotilgan</h4><p id="soldCount">0</p></div>
+    <div class="stat"><h4>Sotilmagan</h4><p id="unsoldCount">0</p></div>
+  </div>
+
+  <div class="admin-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Sana</th><th>Ism</th><th>Tel</th><th>Manzil</th><th>Mahsulot</th><th>Narx</th><th>Sotildi</th>
+        </tr>
+      </thead>
+      <tbody id="ordersBody"></tbody>
+    </table>
   </div>
 </section>
 
-<div id="productModal" class="modal" aria-hidden="true">
+<!-- Modal -->
+<div id="productModal" class="modal">
   <div class="modal-card">
-    <img id="mImg" class="modal-media" alt="">
+    <img id="mImg" class="modal-media" src="" alt="">
     <div class="modal-body">
-      <div class="row">
-        <h3 id="mName" style="margin:0"></h3>
-        <div id="mPrice" class="price"></div>
-      </div>
-      <p id="mDesc" class="muted" style="margin:8px 0 12px"></p>
-
+      <h4 id="mName"></h4>
+      <p id="mDesc" class="muted"></p>
+      <div class="row"><span id="mPrice" class="price"></span></div>
       <form id="orderForm" class="form">
-        <input id="fName" class="input" placeholder="Ism" required />
-        <input id="fPhone" class="input" placeholder="Telefon" required />
-        <input id="fAddr" class="input" placeholder="Manzil" required />
-        <div class="row">
-          <button type="submit" class="btn btn-primary">Buyurtma berish</button>
-          <button type="button" id="closeModal" class="btn">Yopish</button>
-        </div>
+        <input id="fName" class="input" type="text" placeholder="Ismingiz" required/>
+        <input id="fPhone" class="input" type="text" placeholder="Telefon raqamingiz" required/>
+        <input id="fAddr" class="input" type="text" placeholder="Manzilingiz" required/>
+        <button class="btn btn-primary" type="submit">Buyurtma berish</button>
       </form>
+      <button id="closeModal" class="btn btn-outline" style="margin-top:10px">Bekor qilish</button>
     </div>
   </div>
 </div>
